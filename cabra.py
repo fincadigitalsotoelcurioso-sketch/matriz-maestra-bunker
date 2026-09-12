@@ -1,39 +1,36 @@
 import os
-import hmac
-import hashlib
-from fastapi import FastAPI, HTTPException, Request, Header
-from pydantic import BaseModel
+import json
 from datetime import datetime
 
-# --- CONFIGURACIÓN DE SEGURIDAD ---
-# La clave secreta debe estar configurada en sus variables de entorno
-SECRET_KEY = os.environ.get("HMAC_SECRET", "clave-segura-por-defecto").encode()
+# ==========================================
+# MATRIZ MAESTRA - NÚCLEO DE OPERACIONES
+# ==========================================
 
-app = FastAPI()
+DB_CRM = "clientes_matriz.json"
 
-class RegistroImpacto(BaseModel):
-    accion: str
-    impacto_estimado: float
-    beneficiarios: int
+def inicializar_sistema():
+    if not os.path.exists(DB_CRM):
+        with open(DB_CRM, "w") as f:
+            json.dump([], f)
+    print("[MATRIZ EN LÍNEA]: Sistema base configurado y listo para operar.")
 
-# --- MIDDLEWARE DE SEGURIDAD (HMAC) ---
-async def verificar_firma(request: Request, x_signature: str = Header(...)):
-    body = await request.body()
-    expected_signature = hmac.new(SECRET_KEY, body, hashlib.sha256).hexdigest()
-    if not hmac.compare_digest(expected_signature, x_signature):
-        raise HTTPException(status_code=403, detail="Firma no autorizada")
-
-# --- LÓGICA DE PRODUCCIÓN 24/7 ---
-@app.post("/log_impacto/", dependencies=[None]) # Puede añadir verificar_firma aquí
-async def registrar(data: RegistroImpacto):
-    try:
-        # Log centralizado con timestamp
-        print(f"[{datetime.now()}] Impacto registrado: {data.accion}")
-        return {"status": "success", "data": data}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail="Error de persistencia en búnker")
+def registrar_cliente_local(nombre, email, valor):
+    inicializar_sistema()
+    cliente = {
+        "nombre": nombre,
+        "email": email,
+        "valor": valor,
+        "nivel": "VIP" if valor >= 500 else "Estándar",
+        "fecha": str(datetime.now())
+    }
+    
+    with open(DB_CRM, "r+") as f:
+        data = json.load(f)
+        data.append(cliente)
+        f.seek(0)
+        json.dump(data, f, indent=4)
+        
+    print(f"[REGISTRO EXITOSO]: Cliente {nombre} guardado en la base de datos local.")
 
 if __name__ == "__main__":
-    import uvicorn
-    port = int(os.environ.get("PORT", 8080))
-    uvicorn.run(app, host="0.0.0.0", port=port)
+    registrar_cliente_local("Prueba Operativa", "test@cabra.pe", 600)
