@@ -1,58 +1,62 @@
 import os
 import requests
 import json
+import random
+import time
 
-# Búnker Doble Frente - Operación Coordinada
+# Búnker Doble Frente - Operación Cacería Dosificada
 NUMERO_DATOS_CENTRAL = "+573177222608"
 NUMERO_FRENTE_FACEBOOK = "+573123833064"
+OBJETIVO_SEGUIDORES_DIARIOS = 2
 
 OLLAMA_API_URL = "http://localhost:11434/api/generate"
 CARPETA_VIDEOS = "./data/videos"
 
 
-def activar_bunker_doble_frente():
-    print(f"[*] Central de datos blindada en: {NUMERO_DATOS_CENTRAL}")
+def activar_modo_caceria_fantasma():
+    print(f"[*] Central de datos protegida: {NUMERO_DATOS_CENTRAL}")
     print(
-        f"[*] Frente de choque y bulla en redes activado para: {NUMERO_FRENTE_FACEBOOK}"
+        f"[*] Frente de choque activo para bulla internacional: {NUMERO_FRENTE_FACEBOOK}"
+    )
+    print(
+        f"[*] Meta de conversión establecida: {OBJETIVO_SEGUIDORES_DIARIOS} seguidores nuevos diarios de forma orgánica."
     )
 
-    if not os.path.exists(CARPETA_VIDEOS):
-        os.makedirs(CARPETA_VIDEOS)
-        print(f"[+] Carpeta asegurada en: {CARPETA_VIDEOS}")
-
-    # LA ORDEN MAESTRA CON LOS DOS NÚMEROS Y SUS ROLES BIEN DEFINIDOS:
-    instruccion_exacta = (
-        f"Actúa como un estratega de marketing de guerrilla y operaciones digitales autónomas. "
-        f"La central operativa y de datos reside en la línea {NUMERO_DATOS_CENTRAL}, mientras que la cara visible para hacer bulla, "
-        f"dar lora y romper algoritmos en Facebook opera desde la línea {NUMERO_FRENTE_FACEBOOK}. "
-        "Tu tarea al procesar el material de video es: "
-        "1. Generar la traducción multilingüe automática para mercados internacionales. "
-        "2. Diseñar subtítulos dinámicos de nivel cinematográfico con sincronización de labios perfecta (lip-sync). "
-        "3. Inyectar logotipos, branding y ganchos de publicidad digital avanzada que enamoren y atraigan tráfico. "
-        "4. Asegurar que la pauta y los llamados a la acción salgan a nombre del frente de Facebook sin exponer la central."
+    # ORDEN MAESTRA DE CACERÍA Y RESPUESTA DOSIFICADA:
+    instruccion_caceria = (
+        f"Actúa como el sistema autónomo de marketing para la línea {NUMERO_FRENTE_FACEBOOK}. "
+        "Operas bajo la directriz del búnker central ({NUMERO_DATOS_CENTRAL}). "
+        "Tu comportamiento debe ser el de un fantasma sigiloso, humano y natural para evitar bloqueos por spam: "
+        "1. Cuando un usuario internacional comente una publicación, analiza el contexto de su comentario. "
+        "2. Genera una respuesta precisa y coherente al comentario en su idioma nativo, agradeciéndole la interacción. "
+        "3. Incluye una invitación sutil pero magnética para que se sumen a la comunidad y sigan el canal. "
+        "4. Dosifica las acciones con pausas inteligentes; no dispares a toda hora. Mantén un ritmo de goteo enfocado en "
+        f"asegurar exactamente la conquista constante de {OBJETIVO_SEGUIDORES_DIARIOS} seguidores diarios de alta fidelidad."
     )
 
-    payload = {"model": "llama3", "prompt": instruccion_exacta, "stream": False}
+    payload = {"model": "llama3", "prompt": instruccion_caceria, "stream": False}
 
     try:
-        print("[*] Despachando directiva de doble frente al motor local...")
+        print("[*] Sincronizando la cacería dosificada con el motor local...")
         respuesta = requests.post(OLLAMA_API_URL, json=payload)
 
         if respuesta.status_code == 200:
             resultado = respuesta.json().get("response", "")
-            print("\n[+] ¡Estrategia de doble frente inyectada con éxito!")
+            print("\n[+] ¡Protocolo de cacería y respuesta inteligente cargado!")
             print("--------------------------------------------------")
             print(resultado)
             print("--------------------------------------------------")
         else:
             print(
-                "[-] Error: El motor local no respondió. Revise que Ollama esté arriba."
+                "[-] Error: El motor local no respondió. Valide que Ollama esté activo."
             )
 
     except Exception as e:
-        print(f"[-] Falla crítica en el enlace del búnker: {e}")
+        print(f"[-] Falla crítica en el protocolo fantasma: {e}")
 
 
 if __name__ == "__main__":
-    activar_bunker_doble_frente()
-    print("[+] Operación sincronizada. El frente de Facebook está listo para dar lora.")
+    activar_modo_caceria_fantasma()
+    print(
+        "[+] El fantasma quedó configurado para cazar con calma, sin quemarse y con estilo internacional."
+    )
