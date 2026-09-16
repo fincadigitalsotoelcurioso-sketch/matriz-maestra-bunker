@@ -1,47 +1,83 @@
 import os
 import requests
 
-
-def quiz_conectividad():
-  print('--- EXAMEN 1: Conectividad y Red ---')
-  try:
-    response = requests.get('https://httpbin.org/get', timeout=5)
-    if response.status_code == 200:
-      print(
-          f'[ÉXITO] Conexión externa establecida. Código HTTP:'
-          f' {response.status_code}'
-      )
-    else:
-      print(f'[ADVERTENCIA] Código de respuesta inesperado: {response.status_code}')
-  except Exception as e:
-    print(f'[FALLO] Error de red: {e}')
+# Clave de API comercial inyectada desde los Secretos de GitHub o entorno local
+API_KEY = os.environ.get("COMERCIAL_API_KEY", "CLAVE_NO_CONFIGURADA")
+API_URL = "https://api.groq.com/openai/v1/chat/completions"
 
 
-def quiz_memoria_secretos():
-  print('\n--- EXAMEN 2: Memoria y Variables Secretas ---')
-  token = os.environ.get('FB_ACCESS_TOKEN')
-  if token:
-    print(
-        f'[ÉXITO] Secreto FB_ACCESS_TOKEN detectado. Longitud del token:'
-        f' {len(token)} caracteres.'
+def generar_publicidad_visual_multilingue():
+    print("--- INICIANDO MOTOR DE PUBLICIDAD VISUAL AVANZADA Y MULTILINGÜE ---")
+
+    if API_KEY == "CLAVE_NO_CONFIGURADA":
+        print(
+            "[ALERTA] No se encontró la clave comercial en el entorno. Operando en"
+            " modo simulación visual."
+        )
+        # Simulación de estructura avanzada para pruebas locales sin llave
+        print(
+            '\n[ESTRUCTURA GENERADA (SIMULACIÓN)]\n- Eslogan: "Resiliencia que'
+            ' enamora, código que escala."\n- Paleta Cromática: Negro obsidiana,'
+            " Verde esmeralda búnker, Blanco industrial.\n- Prompt Logotipo: Minimal"
+            " 3D vector emblem representing unbreakable core technology, deep"
+            " dark background, vibrant emerald glow.\n- Ganchos multilingües (ES/EN/PT)"
+            " listos para producción."
+        )
+        return
+
+    headers = {
+        "Authorization": f"Bearer {API_KEY}",
+        "Content-Type": "application/json",
+    }
+
+    prompt_sistema = (
+        "Eres el Director Creativo Global y Arquitecto de Marca de una"
+        " corporación tecnológica de élite. Tu especialidad es diseñar"
+        " estrategias de publicidad visual avanzada, logotipos conceptuales,"
+        " paletas de colores y ganchos de copywriting multilingüe de alta"
+        " conversión."
     )
-  else:
-    print('[ALERTA] El secreto FB_ACCESS_TOKEN no está disponible.')
+
+    prompt_usuario = (
+        "Genera una matriz publicitaria completa para un proyecto de software"
+        " resiliente y automatización 24/7. Debe incluir obligatoriamente:\n1."
+        " Concepto visual y directrices técnicas para un logotipo minimalista de"
+        " alto impacto.\n2. Paleta cromática corporativa (con códigos de color o"
+        " descripción exacta).\n3. Ganchos publicitarios magnéticos en 3"
+        " idiomas: Español, Inglés y Portugués.\n4. Estructura lista para"
+        " distribución masiva."
+    )
+
+    payload = {
+        "model": "llama-3.3-70b-versatile",
+        "messages": [
+            {"role": "system", "content": prompt_sistema},
+            {"role": "user", "content": prompt_usuario},
+        ],
+        "temperature": 0.7,
+    }
+
+    try:
+        print("[CONEXIÓN] Solicitando matriz visual avanzada a la nube comercial...")
+        response = requests.post(API_URL, json=payload, headers=headers, timeout=15)
+        if response.status_code == 200:
+            resultado = response.json()["choices"][0]["message"]["content"]
+            print(
+                "\n[ÉXITO 24/7] ¡Matriz de Publicidad Visual Generada en la Nube!\n"
+                "------------------------------------------------------------\n"
+                f"{resultado}\n"
+                "------------------------------------------------------------"
+            )
+        else:
+            print(
+                f"[ERROR API] Código de estado: {response.status_code} -"
+                f" {response.text}"
+            )
+    except Exception as e:
+        print(f"[ALERTA] Fallo crítico de conexión con la nube comercial: {e}")
 
 
-def quiz_reporte_interno():
-  print('\n--- EXAMEN 3: Auditoría y Reporte Interno ---')
-  archivos_locales = os.listdir('.')
-  print(f'[ÉXITO] Archivos en la raíz del búnker: {archivos_locales}')
-  if 'README.md' in archivos_locales:
-    with open('README.md', 'r', encoding='utf-8') as f:
-      lineas = f.readlines()
-    print(f'[ÉXITO] Archivo README.md auditado: {len(lineas)} líneas leídas.')
-
-
-if __name__ == '__main__':
-  print('=== INICIANDO EXAMEN COMPLETO DEL FANTASMA DIGITAL ===')
-  quiz_conectividad()
-  quiz_memoria_secretos()
-  quiz_reporte_interno()
-  print('=== EXAMEN FINALIZADO CON ÉXITO ===')
+if __name__ == "__main__":
+    print("=== DESPLEGANDO NÚCLEO VISUAL Y MULTILINGÜE ===")
+    generar_publicidad_visual_multilingue()
+    print("=== CICLO VISUAL FINALIZADO ===")
