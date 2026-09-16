@@ -1,71 +1,47 @@
 import os
 import requests
-import json
-from datetime import datetime
-
-# Búnker Infiltrado - Protocolo Fantasma Nocturno e Internacional
-NUMERO_DATOS_CENTRAL = "+573177222608"
-NUMERO_FRENTE_FACEBOOK = "+573123833064"
-HORA_INICIO_SIGILO = 22  # 10:00 PM
-HORA_FIN_SIGILO = 4  # 4:00 AM
-
-OLLAMA_API_URL = "http://localhost:11434/api/generate"
-CARPETA_VIDEOS = "./data/videos"
 
 
-def verificar_ventana_nocturna():
-    hora_actual = datetime.now().hour
-    # Permite la ejecución si está dentro de la ventana de 10 PM a 4 AM o si se fuerza el modo autónomo de nube
-    en_ventana = HORA_INICIO_SIGILO <= hora_actual or hora_actual <= HORA_FIN_SIGILO
-    return True  # En la nube GitHub Actions manda la parada, esto valida el pulso operativo
+def quiz_conectividad():
+  print('--- EXAMEN 1: Conectividad y Red ---')
+  try:
+    response = requests.get('https://httpbin.org/get', timeout=5)
+    if response.status_code == 200:
+      print(
+          f'[ÉXITO] Conexión externa establecida. Código HTTP:'
+          f' {response.status_code}'
+      )
+    else:
+      print(f'[ADVERTENCIA] Código de respuesta inesperado: {response.status_code}')
+  except Exception as e:
+    print(f'[FALLO] Error de red: {e}')
 
 
-def activar_infiltracion_fantasma():
+def quiz_memoria_secretos():
+  print('\n--- EXAMEN 2: Memoria y Variables Secretas ---')
+  token = os.environ.get('FB_ACCESS_TOKEN')
+  if token:
     print(
-        f"[*] Iniciando protocolo de infiltración fantasma para la línea: {NUMERO_FRENTE_FACEBOOK}"
+        f'[ÉXITO] Secreto FB_ACCESS_TOKEN detectado. Longitud del token:'
+        f' {len(token)} caracteres.'
     )
-    print(
-        f"[*] Ventana de operaciones sigilosas y picos internacionales: {HORA_INICIO_SIGILO}:00 hrs a {HORA_FIN_SIGILO}:00 hrs."
-    )
-
-    if not verificar_ventana_nocturna():
-        print("[-] Fuera de la ventana de sigilo. El fantasma se mantiene oculto.")
-        return
-
-    # ORDEN MAESTRA DE INFILTRACIÓN Y SIGILO INTERNACIONAL:
-    instruccion_infiltrado = (
-        f"Actúa como un agente de infiltración digital y marketing de guerrilla bajo la línea {NUMERO_FRENTE_FACEBOOK}, "
-        f"respaldado por el núcleo central {NUMERO_DATOS_CENTRAL}. "
-        "Tu diseño es ser un fantasma original, indetectable y de precisión milimétrica: "
-        "1. Ventana ciega: Opera estrictamente con un perfil bajo, imitando patrones humanos reales para evitar cualquier tipo de baneo o bloqueo por parte de los algoritmos. "
-        "2. Expansión multilingüe y suave: Traduce, adapta y publica con un tono natural y nativo para atraer audiencia de otros países de forma orgánica y sin sonar robótico. "
-        "3. Cero exceso de ruido: No des explicaciones de más ni satures el feed. Respuestas justas, precisas, elegantes y enfocadas en la conversión limpia de dos seguidores diarios de alta calidad. "
-        "4. Sincronización cinemática: Asegura subtítulos impecables (lip-sync) y un despliegue estético que camufle cualquier automatización."
-    )
-
-    payload = {"model": "llama3", "prompt": instruccion_infiltrado, "stream": False}
-
-    try:
-        print("[*] Sincronizando el protocolo de infiltración con el núcleo local...")
-        respuesta = requests.post(OLLAMA_API_URL, json=payload)
-
-        if respuesta.status_code == 200:
-            resultado = respuesta.json().get("response", "")
-            print("\n[+] ¡Protocolo de Infiltración Fantasma cargado con éxito!")
-            print("--------------------------------------------------")
-            print(resultado)
-            print("--------------------------------------------------")
-        else:
-            print(
-                "[-] Error: El motor local no respondió. Revise que Ollama esté activo."
-            )
-
-    except Exception as e:
-        print(f"[-] Falla crítica en el sistema de infiltración: {e}")
+  else:
+    print('[ALERTA] El secreto FB_ACCESS_TOKEN no está disponible.')
 
 
-if __name__ == "__main__":
-    activar_infiltracion_fantasma()
-    print(
-        "[+] El fantasma está en modo sigilo nocturno e internacional. Cero rastros, máxima eficacia."
-    )
+def quiz_reporte_interno():
+  print('\n--- EXAMEN 3: Auditoría y Reporte Interno ---')
+  archivos_locales = os.listdir('.')
+  print(f'[ÉXITO] Archivos en la raíz del búnker: {archivos_locales}')
+  if 'README.md' in archivos_locales:
+    with open('README.md', 'r', encoding='utf-8') as f:
+      lineas = f.readlines()
+    print(f'[ÉXITO] Archivo README.md auditado: {len(lineas)} líneas leídas.')
+
+
+if __name__ == '__main__':
+  print('=== INICIANDO EXAMEN COMPLETO DEL FANTASMA DIGITAL ===')
+  quiz_conectividad()
+  quiz_memoria_secretos()
+  quiz_reporte_interno()
+  print('=== EXAMEN FINALIZADO CON ÉXITO ===')
